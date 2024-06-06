@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+Copyright 2012 Mozilla Foundation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Adobe CMap resources are covered by their own copyright but the same license:
+
+    Copyright 1990-2015 Adobe Systems Incorporated.
+
+See https://github.com/adobe-type-tools/cmap-resources
+-->
+<html dir="ltr" mozdisallowselectionprint>
+<header>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</header>
+
+<body tabindex="1">
+  <canvas id="myCanvas"></canvas>
+
+  <script>
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+
+    // 尺寸一直是固定的
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    canvas.style.width = window.innerWidth;
+    canvas.style.height = window.innerHeight;
+
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "red";
+    ctx.fillText("Hello World", canvas.width / 2, canvas.height / 2);
+
+
+    function handleMouseMove(event) {
+      const screenX = event.clientX;
+      const screenY = event.clientY;
+
+      const canvasRect = canvas.getBoundingClientRect();
+      const canvasX = screenX - canvasRect.left;
+      const canvasY = screenY - canvasRect.top;
+
+      // 兼容移动端的高dpr设备
+      const scale = window.devicePixelRatio;
+      const canvasScaledX = canvasX / scale;
+      const canvasScaledY = canvasY / scale;
+
+      console.clear();
+      console.log('Canvas坐标系 X:', canvasScaledX);
+      console.log('Canvas坐标系 Y:', canvasScaledY);
+
+    }
+    canvas.addEventListener('mousemove', handleMouseMove, false);
+
+    // 转换为笛卡尔坐标
+    function change2Cartesian() {
+      const canvas = document.getElementById('myCanvas');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      const ctx = canvas.getContext('2d');
+
+      // 将原点移动到Canvas的中心点
+      ctx.translate(width / 2, height / 2);
+
+      // 反转Y轴方向
+      ctx.scale(1, -1);
+
+      // 在以中心点为原点的笛卡尔坐标系中绘制一个矩形
+      ctx.fillStyle = 'aquamarine';
+      ctx.fillRect(-50, -50, 100, 100);
+
+    }
+
+    change2Cartesian()
+  </script>
+
+</body>
+
+</html>
