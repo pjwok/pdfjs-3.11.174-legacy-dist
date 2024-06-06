@@ -43,37 +43,9 @@
         mesh.rotation.x = Math.PI * 0.25
         mesh.rotation.y = Math.PI * 0.25
 
-        // scene.add(mesh);
+        scene.add(mesh);
 
-        // 加入组
-        /**
- * Objects
- */
-        const group = new THREE.Group()
-        group.scale.y = 2
-        group.rotation.y = 0.2
-        scene.add(group)
 
-        const cube1 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 1, 1),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        )
-        cube1.position.x = - 1.5
-        group.add(cube1)
-
-        const cube2 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 1, 1),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        )
-        cube2.position.x = 0
-        group.add(cube2)
-
-        const cube3 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 1, 1),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        )
-        cube3.position.x = 1.5
-        group.add(cube3)
 
 
         // 加入相机
@@ -93,6 +65,20 @@
         console.log("==", mesh.position.distanceTo)
 
 
+
+        /**
+         * Animate
+         */
+        const tick = () => {
+            console.log('tick')
+            mesh.rotation.y += 0.01
+
+            renderer.render(scene, camera)
+
+            window.requestAnimationFrame(tick)
+        }
+
+        tick()
 
 
     </script>
