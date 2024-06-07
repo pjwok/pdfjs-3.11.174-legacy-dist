@@ -5,11 +5,7 @@
     <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <style>
-        b {
-            color: lightgreen;
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
 </head>
 
 <body>
@@ -68,17 +64,42 @@
 
         /**
          * Animate
+         * 获知到屏幕刷新和电脑时间的关系，那么根据时间来设置旋转的角度，就可以所有屏幕上保持一样的旋转的速度
          */
+        const time = new Date().getTime();
+        const clock = new THREE.Clock() // Clock 的对象，它专门用来处理时间计算
+
+        // const tick = () => {
+        //     const elapsedTime = clock.getElapsedTime();
+        //     // const elapsedTime = (new Date().getTime() - time) / 1000;
+
+        //     // mesh.rotation.y = elapsedTime;
+        //     mesh.position.x = Math.cos(elapsedTime);
+        //     mesh.position.y = Math.sin(elapsedTime);
+
+        //     camera.lookAt(mesh.position) // 改变相机的坐标，并让相机持续 lootAt 看向立方体
+
+        //     renderer.render(scene, camera)
+
+        //     window.requestAnimationFrame(tick)
+        // }
+
+
+        /**
+         * Animate
+         */
+         gsap.to(mesh.rotation, { duration: 10, y: (Math.PI/180) })
+        //  gsap.to(mesh.rotation, {duration: 10, y: Math.PI * 2, repeat: -1, ease: "none"});
+
         const tick = () => {
-            console.log('tick')
-            mesh.rotation.y += 0.01
 
             renderer.render(scene, camera)
-
-            window.requestAnimationFrame(tick)
+            window.requestAnimationFrame(tick);
         }
 
+
         tick()
+
 
 
     </script>
