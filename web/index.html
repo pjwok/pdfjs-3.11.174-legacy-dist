@@ -46,7 +46,7 @@
 
         // 加入相机
         const sizes = { width: 800, height: 600 }
-        const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+        const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 1, 50)
         camera.position.z = 3 // 摄像机位置
 
         camera.lookAt(mesh.position)
@@ -59,6 +59,32 @@
 
         renderer.render(scene, camera)  // 渲染场景和相机
         console.log("==", mesh.position.distanceTo)
+
+
+
+        // const aspectRatio = sizes.width / sizes.height 
+        // const camera = new THREE.OrthographicCamera(- 1 * aspectRatio, 1 * aspectRatio, 1, - 1, 0.1, 100) 
+        // camera.position.x = 2 
+        // camera.position.y = 2 
+        // camera.position.z = 3 
+        // camera.lookAt(mesh.position) 
+        // scene.add(camera)
+        const cursor = { x: 0, y: 0 }
+
+        window.addEventListener('mousemove', (event) => {
+            cursor.x = event.clientX / sizes.width - 0.5;
+            cursor.y = -(event.clientY / sizes.height - 0.5);
+
+            // console.log(cursor.x, cursor.y)
+            // // Update 
+            // // camera.position.x = cursor.x; camera.position.y = cursor.y;
+
+
+            // camera.position.x = cursor.x * 5
+            // camera.position.y = cursor.y * 5
+            // camera.lookAt(mesh.position)
+        })
+
 
 
 
@@ -88,10 +114,14 @@
         /**
          * Animate
          */
-         gsap.to(mesh.rotation, { duration: 10, y: (Math.PI/180) })
+        // gsap.to(mesh.rotation, { duration: 10, y: (Math.PI / 180) })
         //  gsap.to(mesh.rotation, {duration: 10, y: Math.PI * 2, repeat: -1, ease: "none"});
 
         const tick = () => {
+            camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2 
+            camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 2 
+            camera.position.y = cursor.y * 3 
+            camera.lookAt(mesh.position)
 
             renderer.render(scene, camera)
             window.requestAnimationFrame(tick);
