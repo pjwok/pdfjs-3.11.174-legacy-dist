@@ -17,7 +17,6 @@
     <script type="module">
         import * as THREE from './three.module.js';
 
-        console.log(THREE);
         const scene = new THREE.Scene();
         /**
         * Axes Helper
@@ -25,23 +24,11 @@
         const axesHelper = new THREE.AxesHelper(2);// 2 is the length of the axes
         scene.add(axesHelper);
 
-
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
         const mesh = new THREE.Mesh(geometry, material)
-        console.log(mesh.position);
-        // mesh.scale.x = 1
-        // mesh.scale.y = 0.25
-        // mesh.scale.z = 0.5 
-
-        // mesh.position.set(0.7, - 0.6, 1)
-
-        mesh.rotation.x = Math.PI * 0.25
-        mesh.rotation.y = Math.PI * 0.25
 
         scene.add(mesh);
-
-
 
 
         // 加入相机
@@ -49,7 +36,6 @@
         const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 1, 50)
         camera.position.z = 3 // 摄像机位置
 
-        camera.lookAt(mesh.position)
         scene.add(camera);
 
         const canvas = document.querySelector('canvas.webgl')
@@ -61,74 +47,39 @@
         console.log("==", mesh.position.distanceTo)
 
 
-
-        // const aspectRatio = sizes.width / sizes.height 
-        // const camera = new THREE.OrthographicCamera(- 1 * aspectRatio, 1 * aspectRatio, 1, - 1, 0.1, 100) 
-        // camera.position.x = 2 
-        // camera.position.y = 2 
-        // camera.position.z = 3 
-        // camera.lookAt(mesh.position) 
-        // scene.add(camera)
-        const cursor = { x: 0, y: 0 }
-
-        window.addEventListener('mousemove', (event) => {
-            cursor.x = event.clientX / sizes.width - 0.5;
-            cursor.y = -(event.clientY / sizes.height - 0.5);
-
-            // console.log(cursor.x, cursor.y)
-            // // Update 
-            // // camera.position.x = cursor.x; camera.position.y = cursor.y;
-
-
-            // camera.position.x = cursor.x * 5
-            // camera.position.y = cursor.y * 5
-            // camera.lookAt(mesh.position)
-        })
-
-
-
-
-        /**
-         * Animate
-         * 获知到屏幕刷新和电脑时间的关系，那么根据时间来设置旋转的角度，就可以所有屏幕上保持一样的旋转的速度
-         */
-        const time = new Date().getTime();
-        const clock = new THREE.Clock() // Clock 的对象，它专门用来处理时间计算
-
-        // const tick = () => {
-        //     const elapsedTime = clock.getElapsedTime();
-        //     // const elapsedTime = (new Date().getTime() - time) / 1000;
-
-        //     // mesh.rotation.y = elapsedTime;
-        //     mesh.position.x = Math.cos(elapsedTime);
-        //     mesh.position.y = Math.sin(elapsedTime);
-
-        //     camera.lookAt(mesh.position) // 改变相机的坐标，并让相机持续 lootAt 看向立方体
-
-        //     renderer.render(scene, camera)
-
-        //     window.requestAnimationFrame(tick)
-        // }
-
-
         /**
          * Animate
          */
-        // gsap.to(mesh.rotation, { duration: 10, y: (Math.PI / 180) })
-        //  gsap.to(mesh.rotation, {duration: 10, y: Math.PI * 2, repeat: -1, ease: "none"});
+         const time = new Date().getTime()
+         const clock = new THREE.Clock()
+         
+         gsap.to(mesh.rotation, { duration: 1, y: 45*(Math.PI/180) })
 
         const tick = () => {
-            camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2 
-            camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 2 
-            camera.position.y = cursor.y * 3 
+            console.log('tick')
+            
+            // // 不同刷新率旋转执行requestAnimationFrame的次数不一样 根据时间来判断旋转角度
+            // const elapsedTime = (new Date().getTime()-time)/1000; 
+            // mesh.rotation.y = elapsedTime;
+
+            // const elapsedTime = clock.getElapsedTime() 
+            // mesh.rotation.y = elapsedTime
+
+            const elapsedTime = clock.getElapsedTime();
+            // mesh.position.x = Math.cos(elapsedTime) 
+            // mesh.position.y = Math.sin(elapsedTime)
+
+            camera.position.x = Math.cos(elapsedTime) 
+            camera.position.y = Math.sin(elapsedTime) 
             camera.lookAt(mesh.position)
 
             renderer.render(scene, camera)
-            window.requestAnimationFrame(tick);
+
+            window.requestAnimationFrame(tick)
         }
 
-
         tick()
+
 
 
 
