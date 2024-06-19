@@ -109,6 +109,16 @@
             // 处理像素比
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+        });
+
+
+        window.addEventListener('dblclick', () => {
+            // 使网页全屏
+            if (!document.fullscreenElement) {
+                canvas.requestFullscreen()
+            } else {
+                document.exitFullscreen()
+            }
         })
 
 
