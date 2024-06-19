@@ -6,11 +6,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="info"><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - cameras<br />
-    </div>
+    <!-- <div id="info"><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - cameras<br />
+    </div> -->
 
     <canvas class="webgl"></canvas>
 
@@ -27,14 +35,14 @@
         scene.add(axesHelper);
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        const material = new THREE.MeshBasicMaterial({ color: 0xeba0b3 })
         const mesh = new THREE.Mesh(geometry, material)
 
         scene.add(mesh);
 
 
         // 加入相机
-        const sizes = { width: 800, height: 600 }
+        const sizes = { width: window.innerWidth, height: window.innerHeight }
         // const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 1, 50)
         // camera.position.z = 3 // 摄像机位置
 
@@ -71,16 +79,9 @@
 
         
 
-        // /**
-        //  * Animate
-        //  */
-        // const cursor = { x: 0, y: 0 }
-        // window.addEventListener('mousemove', (event) => {
-        //     cursor.x = event.clientX / sizes.width - 0.5
-        //     cursor.y = -(event.clientY / sizes.height - 0.5)
-        //     console.log(cursor);
-        // });
-
+        /**
+         * Animate
+         */
         const tick = () => {
 
 
@@ -91,7 +92,20 @@
             window.requestAnimationFrame(tick)
         }
 
-        tick()
+        tick();
+
+        window.addEventListener('resize', () => {
+            // Update sizes 每次收到通知时都重新获取一下网页可视区的大小并更新sizes对象
+            sizes.width = window.innerWidth;
+            sizes.height = window.innerHeight;
+
+            // Update camera
+            camera.aspect = sizes.width / sizes.height
+            camera.updateProjectionMatrix();//更新投影矩阵
+
+            // Update renderer
+            renderer.setSize(sizes.width, sizes.height)
+        })
 
 
 
