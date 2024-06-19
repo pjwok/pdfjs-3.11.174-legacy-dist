@@ -72,12 +72,12 @@
 
         console.log("domElement==", renderer.domElement);
         const controls = new OrbitControls(camera, renderer.domElement);
-        console.log({controls});
+        console.log({ controls });
         // controls.target.y = 2
         controls.enableDamping = true
 
 
-        
+
 
         /**
          * Animate
@@ -104,8 +104,13 @@
             camera.updateProjectionMatrix();//更新投影矩阵
 
             // Update renderer
-            renderer.setSize(sizes.width, sizes.height)
+            renderer.setSize(sizes.width, sizes.height);
+
+            // 处理像素比
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
         })
+
 
 
 
