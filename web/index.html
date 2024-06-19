@@ -29,14 +29,31 @@
         import { OrbitControls } from './OrbitControls.js';
 
         const scene = new THREE.Scene();
+
         /**
         * Axes Helper
         */
         const axesHelper = new THREE.AxesHelper(2);// 2 is the length of the axes
         scene.add(axesHelper);
 
+
+        //const image = new Image()
+        //const texture = new THREE.Texture(image);
+
+        //image.addEventListener('load', () => {
+        //    console.log('image loaded')
+        //    texture.needsUpdate = true;
+        //}); 
+        //image.src = './assets/colors.png'
+
+        const textureLoader = new THREE.TextureLoader()
+        const onload = (event) => { console.log('load', event) }
+        const onprogress = (progress) => { console.log('progress', progress)}
+        const onerror = (e) => { console.log('error',e) }
+        const texture = textureLoader.load('./assets/colors.png', onload, onprogress, onerror);
+
         const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0xeba0b3 })
+        const material = new THREE.MeshBasicMaterial({ map: texture })
         const mesh = new THREE.Mesh(geometry, material)
 
         scene.add(mesh);
@@ -69,20 +86,14 @@
         renderer.setSize(sizes.width, sizes.height) // 更新渲染器的绘制尺寸
 
         renderer.render(scene, camera)  // 渲染场景和相机
-        console.log("==", mesh.position.distanceTo)
 
-        console.log("domElement==", renderer.domElement);
         const controls = new OrbitControls(camera, renderer.domElement);
-        console.log({ controls });
-        // controls.target.y = 2
-        controls.enableDamping = true
+        controls.enableDamping = true;
 
         /**
          * Animate
          */
         const tick = () => {
-
-
             controls.update()
 
             renderer.render(scene, camera)
