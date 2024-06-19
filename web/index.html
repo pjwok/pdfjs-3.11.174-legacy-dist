@@ -16,6 +16,8 @@
 
     <script type="module">
         import * as THREE from './three.module.js';
+        // 引入轨道控制器
+        import { OrbitControls } from './OrbitControls.js';
 
         const scene = new THREE.Scene();
         /**
@@ -60,28 +62,29 @@
         renderer.render(scene, camera)  // 渲染场景和相机
         console.log("==", mesh.position.distanceTo)
 
+        console.log("domElement==", renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
+        console.log({controls});
+        // controls.target.y = 2
+        controls.enableDamping = true
 
-        /**
-         * Animate
-         */
-        const cursor = { x: 0, y: 0 }
-        window.addEventListener('mousemove', (event) => {
-            cursor.x = event.clientX / sizes.width - 0.5
-            cursor.y = -(event.clientY / sizes.height - 0.5)
-            console.log(cursor);
-        });
+
+        
+
+        // /**
+        //  * Animate
+        //  */
+        // const cursor = { x: 0, y: 0 }
+        // window.addEventListener('mousemove', (event) => {
+        //     cursor.x = event.clientX / sizes.width - 0.5
+        //     cursor.y = -(event.clientY / sizes.height - 0.5)
+        //     console.log(cursor);
+        // });
 
         const tick = () => {
 
 
-
-            // camera.position.x = cursor.x * 5
-            // camera.position.y = cursor.y * 5
-
-            camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2 
-            camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 2 
-            camera.position.y = cursor.y * 3
-            camera.lookAt(mesh.position)
+            controls.update()
 
             renderer.render(scene, camera)
 
