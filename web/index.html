@@ -43,16 +43,39 @@
         //image.addEventListener('load', () => {
         //    console.log('image loaded')
         //    texture.needsUpdate = true;
-        //}); 
+        //});
         //image.src = './assets/colors.png'
 
         const textureLoader = new THREE.TextureLoader()
         const onload = (event) => { console.log('load', event) }
-        const onprogress = (progress) => { console.log('progress', progress)}
-        const onerror = (e) => { console.log('error',e) }
+        const onprogress = (progress) => { console.log('progress', progress) }
+        const onerror = (e) => { console.log('error', e) }
         const texture = textureLoader.load('./assets/colors.png', onload, onprogress, onerror);
+        // texture.repeat.x = 2 // 设置重复次数 类似于css中的background-image
+        // texture.repeat.y = 3
+
+        // texture.wrapS = THREE.RepeatWrapping // 设置重复模式 如果不设置重复模式 最后一个贴图的最后一个像素会被拉伸
+        // texture.wrapS = THREE.MirroredRepeatWrapping // 设置重复模式
+
+        // texture.offset.x = 0.5 // 设置偏移量
+        // texture.offset.y = 0.5
+
+        texture.rotation = Math.PI / 4 // 设置旋转角度 旋转角度的圆心默认是在立方体的面的左下角
+        // 改变圆心
+        texture.center.x = 0.5
+        texture.center.y = 0.5
+
+        // texture.wrapT = THREE.RepeatWrapping // 设置重复模式
+
+        //const loadingManager = new THREE.LoadingManager()
+        //loadingManager.onStart = () => { }
+        //loadingManager.onLoad = () => { }
+        //loadingManager.onProgress = () => { }
+        //loadingManager.onError = () => { }
+        //const textureLoader = new THREE.textureLoader(loadingManager) 
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
+        console.log({ uv: geometry.attributes.uv });
         const material = new THREE.MeshBasicMaterial({ map: texture })
         const mesh = new THREE.Mesh(geometry, material)
 
@@ -142,11 +165,11 @@
         gui.add(mesh, 'visible')
 
         // 修改材质的线框wireframe属性
-        gui.add(material, 'wireframe') 
+        gui.add(material, 'wireframe')
 
-        const parameters = { 
-            color: 0xff0000, 
-            spin: () => { gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 }) } 
+        const parameters = {
+            color: 0xff0000,
+            spin: () => { gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 }) }
         }
         gui.addColor(parameters, 'color').onChange(() => { material.color.set(parameters.color) })
 
